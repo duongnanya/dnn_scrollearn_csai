@@ -60,7 +60,8 @@ NODE_ENV=production npm start
 ## Deploy Vercel
 
 - Frontend: Vite build → `dist/`
-- API: Serverless Functions trong thư mục `api/` (`/api/analyze-url`, `/api/analyze-text`, `/api/analyze-image`, `/api/health`)
+- API: esbuild bundle `lib/apiRouter.ts` → `api/[...path].cjs` (chạy trong `npm run build`)
+- Endpoints: `/api/health`, `/api/analyze-url`, `/api/analyze-text`, `/api/analyze-image`
 - **Bắt buộc** thêm biến môi trường trên Vercel:
   - `GEMINI_API_KEY` (runtime — cho API)
   - `VITE_FIREBASE_*` (build time — cho client)

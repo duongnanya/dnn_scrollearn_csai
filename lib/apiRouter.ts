@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { analyzeUrl, analyzeText, analyzeImage, mapAnalyzeError } from './analyzeCore';
 
 export const config = {
   maxDuration: 60,
@@ -17,7 +18,7 @@ function methodNotAllowed(res: VercelResponse) {
   return res.status(405).json({ error: 'Method not allowed' });
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+async function handler(req: VercelRequest, res: VercelResponse) {
   const route = getRoute(req);
 
   try {
@@ -26,8 +27,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const key = (process.env.GEMINI_API_KEY || '').trim();
       return res.status(200).json({ ok: true, gemini: !!key });
     }
-
-    const { analyzeUrl, analyzeText, analyzeImage, mapAnalyzeError } = await import('../lib/analyzeCore');
 
     if (route === 'analyze-url') {
       if (req.method !== 'POST') return methodNotAllowed(res);
@@ -67,3 +66,5 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ error: msg });
   }
 }
+
+export default handler;
