@@ -56,3 +56,12 @@ firebase deploy --only firestore:rules
 npm run build
 NODE_ENV=production npm start
 ```
+
+## Deploy Vercel
+
+- Frontend: Vite build → `dist/`
+- API: Serverless Functions trong thư mục `api/` (`/api/analyze-url`, `/api/analyze-text`, `/api/analyze-image`, `/api/health`)
+- **Bắt buộc** thêm biến môi trường trên Vercel:
+  - `GEMINI_API_KEY` (runtime — cho API)
+  - `VITE_FIREBASE_*` (build time — cho client)
+- Kiểm tra: `GET https://your-app.vercel.app/api/health` → `{ "ok": true, "gemini": true }`

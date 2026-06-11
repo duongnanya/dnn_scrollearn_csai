@@ -24,6 +24,7 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@vercel/node": "^5.1.14",
     "@tailwindcss/vite": "^4.0.9",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",

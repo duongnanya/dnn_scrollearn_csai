@@ -110,6 +110,10 @@ async function apiCall<T>(endpoint: string, body: object): Promise<T> {
   } catch {
     throw new Error('Không kết nối được server. Hãy chạy npm run dev và thử lại.');
   }
+  const contentType = res.headers.get('content-type') || '';
+  if (!contentType.includes('application/json')) {
+    throw new Error(`API không phản hồi JSON (${res.status}). Kiểm tra GEMINI_API_KEY trên Vercel và endpoint /api.`);
+  }
   let data: { error?: string };
   try {
     data = await res.json();
