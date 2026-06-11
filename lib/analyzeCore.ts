@@ -2,8 +2,14 @@ import * as cheerio from 'cheerio';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import https from 'https';
 import http from 'http';
-import { normalizeInfographics } from '../src/utils/infographicNormalizer';
-import type { QuizData } from '../src/types';
+import { normalizeInfographics } from './infographicNormalizer';
+
+interface QuizData {
+  question: string;
+  options: { text: string; isCorrect: boolean }[];
+  explanation: string;
+  coversPieceIndexes?: number[];
+}
 
 const GEMINI_API_KEY = (process.env.GEMINI_API_KEY || '').trim();
 const genAI = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
