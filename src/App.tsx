@@ -98,8 +98,16 @@ function saveLocalSettings(s: UserSettings) {
   localStorage.setItem(LS_SETTINGS, JSON.stringify(s));
 }
 
+function getApiBase(): string {
+  if (import.meta.env.DEV) return '/api';
+  const raw = (import.meta.env.VITE_API_BASE_URL || '').trim();
+  // Build cũ có thể nhúng localhost — production luôn dùng /api cùng domain
+  if (!raw || /localhost|127\.0\.0\.1/i.test(raw)) return '/api';
+  return raw.replace(/\/$/, '');
+}
+
 async function apiCall<T>(endpoint: string, body: object): Promise<T> {
-  const base = import.meta.env.DEV ? '/api' : (import.meta.env.VITE_API_BASE_URL || '/api');
+  const base = getApiBase();
   let res: Response;
   try {
     res = await fetch(`${base}${endpoint}`, {
@@ -112,7 +120,7 @@ async function apiCall<T>(endpoint: string, body: object): Promise<T> {
   }
   const contentType = res.headers.get('content-type') || '';
   if (!contentType.includes('application/json')) {
-    throw new Error(`API không phản hồi JSON (${res.status}). Kiểm tra GEMINI_API_KEY trên Vercel và endpoint /api.`);
+    throw new Error(`API không phản hồi JSON (${res.status}). URL: ${base}${endpoint}`);
   }
   let data: { error?: string };
   try {
