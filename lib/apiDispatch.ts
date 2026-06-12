@@ -1,26 +1,11 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { analyzeUrl, analyzeText, analyzeImage, mapAnalyzeError } from './analyzeCore';
 
-export const config = {
-  maxDuration: 60,
-};
-
-function getRoute(req: VercelRequest): string {
-  const fromQuery = req.query.path;
-  if (Array.isArray(fromQuery)) return fromQuery.join('/');
-  if (typeof fromQuery === 'string' && fromQuery) return fromQuery;
-
-  const pathname = (req.url || '').split('?')[0];
-  return pathname.replace(/^\/api\/?/, '').replace(/\/$/, '');
-}
-
 function methodNotAllowed(res: VercelResponse) {
   return res.status(405).json({ error: 'Method not allowed' });
 }
 
-async function handler(req: VercelRequest, res: VercelResponse) {
-  const route = getRoute(req);
-
+export async function dispatchApi(req: VercelRequest, res: VercelResponse, route: string) {
   try {
     if (route === 'health') {
       if (req.method !== 'GET') return methodNotAllowed(res);
@@ -59,12 +44,10 @@ async function handler(req: VercelRequest, res: VercelResponse) {
       }
     }
 
-    return res.status(404).json({ error: `API route không tồn tại: ${route || '(empty)'}` });
+    return res.status(404).json({ error: `API route không tồn tại: ${route}` });
   } catch (err) {
     console.error('[api]', route, err);
     const msg = err instanceof Error ? err.message : 'Lỗi server';
     return res.status(500).json({ error: msg });
   }
 }
-
-export default handler;
