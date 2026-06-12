@@ -9,7 +9,7 @@
     "dev:server": "tsx watch --env-file=.env server.ts",
     "build": "tsc -b && vite build && node scripts/build-api.mjs",
     "vercel:env": "node scripts/vercel-env.mjs",
-    "vercel:deploy": "npm run build && vercel deploy --prod",
+    "vercel:deploy": "npm run build && vercel deploy --prod --yes",
     "preview": "vite preview",
     "start": "tsx server.ts"
   },

@@ -19,6 +19,11 @@ const KEYS = [
   'VITE_API_BASE_URL',
 ];
 
+// Production: API cùng domain — không dùng localhost
+const PRODUCTION_OVERRIDES = {
+  VITE_API_BASE_URL: '/api',
+};
+
 function parseEnv(content) {
   const map = new Map();
   for (const line of content.split('\n')) {
@@ -60,7 +65,10 @@ let ok = 0;
 let fail = 0;
 
 for (const key of KEYS) {
-  const value = env.get(key);
+  let value = env.get(key);
+  if (key in PRODUCTION_OVERRIDES) {
+    value = PRODUCTION_OVERRIDES[key];
+  }
   if (value == null || value === '') {
     console.log(`[SKIP] ${key} — trống trong .env`);
     continue;

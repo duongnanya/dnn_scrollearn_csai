@@ -1,11 +1,5 @@
 {
   "rewrites": [
     { "source": "/((?!api/).*)", "destination": "/index.html" }
-  ],
-  "functions": {
-    "api/*.cjs": {
-      "maxDuration": 60,
-      "memory": 1024
-    }
-  }
+  ]
 }
