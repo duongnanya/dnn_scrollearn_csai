@@ -1,6 +1,6 @@
 import { analyzeImage, mapAnalyzeError } from '../lib/analyzeCore';
 
-export const config = { maxDuration: 60, memory: 1024 };
+export const config = { maxDuration: 60 };
 
 export async function POST(request: Request) {
   try {
